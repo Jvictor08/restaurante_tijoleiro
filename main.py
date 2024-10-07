@@ -9,12 +9,14 @@ result = 0
 while result != 1 or result != 2 or result != 3 or result != 4:
     print("(1)Area Cliente, (2)Area Produto, (5)Sair ")
     result = int(input("Escolha uma das opções: "))
+
     # PARTE DOS CLIENTES
+
     if result == 1:
         print("Você entrou na opção cliente verifique as opções")
         result1 = 0
         while result1 != 1 or result1 != 2 or result1 != 3 or result1 != 4 or result1 != 5:
-            print("1- Cadastro de novo cliente, 2- Listagem dos clientes, 3- Alteração de cliente, 4- Desativar cliente, 5- Voltar para Menu inicial")
+            print("1- Cadastro de novo cliente, 2- Listagem dos clientes, 3- Alteração de cliente, 4- Desativar/Ativar cliente, 5- Voltar para Menu inicial")
             result1 = int(input("Escolha uma opção do menu: "))
             #  CRIAÇÃO DE CLIENTE
             if result1 == 1:
@@ -28,13 +30,17 @@ while result != 1 or result != 2 or result != 3 or result != 4:
                     novo_cadastro = Cliente(mydb)
                     novo_cadastro.inserir_cliente(nome,telefone)
                 continue
+
             #LISTAGEM DE CLIENTE
+
             if result1 == 2:
                 print("Você entrou na listagem de clientes!")
                 listagem = Cliente(mydb)
                 listagem.listar_cliente()
                 continue
+
             #ALTERAÇÃO DE CLIENTE
+
             if result1 == 3:
                 print("Você entrou na alteração de cliente!")
                 id = input("informe o id do cliente que deseja alterar(Digite 0 para cancelar): ")
@@ -54,27 +60,55 @@ while result != 1 or result != 2 or result != 3 or result != 4:
                     else:
                         print("Alteração abortada.")
                         continue
-            # DESATIVAÇÃO DE CLIENTE
+
+            # DESATIVAÇÃO E ATIVAÇÃO DE CLIENTE
+
             if result1 == 4:
-                print("Você entrou na desativação de clientes!")
-                id_cliente = (input("Digite o id do cliente que deseja deletar (Digite 0 para cancelar): "))
+                print("Você entrou na ativação/desativação de clientes!")
+                desativa = Cliente(mydb)
+                id_cliente = (input("Digite o id do cliente que deseja desativar (Digite 0 para cancelar): "))
                 if id_cliente =='0':
-                    deleta = Cliente(mydb)
-                    deleta.deletar_cliente(id_cliente)
+                    print("Desativação cancelada!")
                     continue
+                else:
+                    retorno = desativa.listagem_especitia_ativa_desativa(id_cliente)
+                    if retorno == 1:
+                        print("Atualmente este cliente está ativo.")
+                        resp = input("Deseja desativa-lo? (S/N) ").upper()
+                        if resp == 'S':            
+                            desativa.desativar_cliente(id_cliente)
+                        else:
+                            print("Desativação abortada")
+                            continue
+                    elif retorno == 0:
+                        print("Ataualmente este cliente está desativado.")
+                        resp = input("Deseja ativa-lo? (S/N) ").upper()
+                        if resp == 'S':
+                            desativa.ativar_cliente(id_cliente)
+                        else:
+                            print("Ativação abortada")
+                            continue
+                    else:
+                        print("Status inválido verifique na tabela")
+                    continue
+
             # RETORNAR AO MENU PRINCIPAL
+
             if result1 == 5:
                 print("Retornando ao menu principal")
                 break
 
     # AQUI É A PARTE DOS PRODUTOS.
+
     elif result == 2:
         print("Você entrou na opção cliente verifique as opções")
         result2 = 0
         while result2 != 1 or result2 != 2 or result2 != 3 or result2 != 4 or result2 != 5:
             print("1- Cadastro de novo produto, 2- Listagem dos produtos, 3- Alteração de produto, 4- Desativar produto, 5- Voltar para Menu inicial")
             result2 = int(input("Escolha uma opção do menu: "))
+
             #CADASTRO DE PRODUTO
+
             if result2 == 1:
                 print("Cadastro de Produto")
                 descricao = input("Digite a descricao do produto (Digite 0 para cancelar): ").upper()
@@ -87,13 +121,17 @@ while result != 1 or result != 2 or result != 3 or result != 4:
                     novo_cadastro = Produto(mydb)
                     novo_cadastro.inserir_produto(descricao,tamanho, valor)
                 continue
+
             #LISTAGEM DE PRODUTO
+
             elif result2 == 2:
                 print("Listagem de produtos")
                 listagem = Produto(mydb)
                 listagem.listar_produto()
                 continue
+
             #ALTERAÇÃO DE PRODUTO
+
             elif result2 == 3:
                 print("Você entrou na alteração de produtos!")
                 id_produto = input("informe o id do produto que deseja alterar(Digite 0 para cancelar): ")
@@ -115,15 +153,44 @@ while result != 1 or result != 2 or result != 3 or result != 4:
                     else:
                         print("Alteração abortada.")
                         continue
-            # DESATIVAÇÃO DE PRODUTO
+
+            # DESATIVAÇÃO/ATIVAÇÃO DE PRODUTO
+            
+
             elif result2 == 4:
-                print("Aqui será a função de desativação - em desenvolvimento...")
-            # RETORNAR AO MENU PRINCIPAL
+                print("Você entrou na desativação/ativação de produtos!")
+                desativa = Produto(mydb)
+                id_produto = (input("Digite o id do produto que deseja desativar (Digite 0 para cancelar): "))
+                if id_produto =='0':
+                    print("Desativação cancelada")
+                    continue
+                else:
+                    retorno = desativa.listagem_especitia_ativa_desativa(id_produto)
+                    if retorno == 1:
+                        print("Atualmente este produto está ativo.")
+                        resp = input("Deseja desativa-lo? (S/N) ").upper()
+                        if resp == 'S':            
+                            desativa.desativar_produto(id_produto)
+                        else:
+                            print("Desativação abortada")
+                            continue
+                    elif retorno == 0:
+                        print("Ataualmente este produto está desativado.")
+                        resp = input("Deseja ativa-lo? (S/N) ").upper()
+                        if resp == 'S':
+                            desativa.ativar_produto(id_produto)
+                        else:
+                            print("Ativação abortada")
+                            continue
+                    else:
+                        print("Status inválido verifique na tabela")
+                    continue
+
+        # RETORNAR AO MENU PRINCIPAL
+
             elif result2 == 5:
                 print("Retornando ao menu principal")
                 break
-
-
     elif result == 3:
         print("Outra funcionalidade")
     
