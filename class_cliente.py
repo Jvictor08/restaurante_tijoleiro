@@ -48,9 +48,21 @@ class Cliente:
                 cursor.execute(query,dados)
                 result = cursor.fetchall()
                 for linha in result:
-                    print(linha)
+                    print(linha)             
             except Error as e:
-                print("Caiu no except da classe Cliente:")
+                print(f"Erro ao rodar listagem especifica! ERROR: {e}")
+
+    def listagem_especitia_ativa_desativa(self, id):
+        if self.cursor:
+            try:
+                cursor = self.connection.cursor()
+                query = "select ativo, case when ativo = 1 then 'S' when ativo = 0 then 'N' end as status_ativo from cliente where id_cliente = %s;"
+                dados = id,
+                cursor.execute(query, dados)
+                result = cursor.fetchone()
+                return result[0]
+            except Error as e:
+                print(f"Erro ao rodar a listagem especifica do desativa/ativa! ERROR: {e}")
 
     def alterar_cliente(self, nome, telefone, id):
         if self.cursor:
@@ -64,7 +76,7 @@ class Cliente:
             except Error as e:
                 print(f"Ocorreu um erro ao alterar o cliente id {id}")
 
-    def deletar_cliente(self, id):
+    def desativar_cliente(self, id):
         if self.cursor:
             try:
                 cursor = self.connection.cursor()
@@ -74,12 +86,22 @@ class Cliente:
                 print(f"Cliente id: {id} desativado com sucesso!")
                 self.connection.commit()
             except Error as e:
-                print("Erro ao remover o cliente selecionado")
-            finally:
-                cursor.close()
+                print("Erro ao desativar cliente selecionado")
 
-    def fechar_conexao(self):
+    def ativar_cliente(self, id):
+        if self.cursor:
+            try:
+                cursor = self.connection.cursor()
+                query = "update cliente set ativo = 1 where id_cliente = %s;"
+                dados = (id,)
+                cursor.execute(query, dados)
+                print(f"Cliente id: {id} ativado com sucesso!")
+                self.connection.commit()
+            except Error as e:
+                print("Erro ao ativar cliente selecionado")
+
+"""    def fechar_conexao(self):
         if self.connection and self.connection.is_connected():
             self.cursor.close()
             self.connection.close()
-            print("Conexão foi finalizada.")
+            print("Conexão foi finalizada.")"""
