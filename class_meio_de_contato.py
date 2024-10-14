@@ -2,7 +2,7 @@
 from mysql.connector import Error
 
 #classe que irá gerenciar a conexão com o banco de dados
-class meio_de_contato:
+class Contato:
     #método construtor da classe para conectar no banco de dados e os parametros
     def __init__(self, mydb):
         self.connection = mydb
