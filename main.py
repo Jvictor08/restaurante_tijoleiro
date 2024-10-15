@@ -2,17 +2,102 @@
 from class_conexao import mydb
 from class_cliente import Cliente
 from class_produto import Produto
+from class_endereco import Endereco
 
 
 print("Bem vindo!!")
 result = 0
 while result != 1 or result != 2 or result != 3 or result != 4:
-    print("(1)Area Cliente, (2)Area Produto, (5)Sair ")
+    print("(1)Endereço, (2)Cliente, (3)Area Produto, (4)Outra coisa, (5)Sair ")
     result = int(input("Escolha uma das opções: "))
 
     # PARTE DOS CLIENTES
 
     if result == 1:
+        print("Você entrou na opção de cadastro de endereços")
+        result1 = 0
+        while result1 != 1 or result1 != 2 or result1 != 3 or result1 != 4 or result1 != 5:
+            print("(1)Cadastro de novo endereço, (2)Listagem de endereços, (3)Alteração de endereço, (4)Desativação de endereço, (5)Voltar ao menu inicial")
+            result1 =  int(input("Escolha uma opção do menu: "))
+            # CADASTRO DE ENDEREÇO
+            if result1 == 1:
+                print("Cadastro de endereço")
+                cidade = input("Digite a cidade do cliente(Digite 0 para cancelar): ").upper()
+                bairro = input("Digite o bairro do cliente: ").upper()
+                rua = input("Digite a rua do cliente: ").upper()
+                numero = input("Digite o numero do cliente: ").upper()
+                if cidade == '0' or bairro == '0' or rua == '0' or numero == '0':
+                    print("Operação cancelada.")
+                    break
+                else:
+                    novo_cadastro = Endereco(mydb)
+                    novo_cadastro.inserir_endereco(cidade,bairro,rua,numero)
+                continue
+
+            elif result1 == 2:
+                print("Listagem de endereços")
+                listagem = Endereco(mydb)
+                listagem.listar_endereco()
+                continue
+
+            elif result1 == 3:
+                print("Você entrou na alteração de endereço!")
+                altera = Endereco(mydb)
+                altera.listar_endereco_completo()
+                id = input("informe o id do endereço que deseja alterar(Digite 0 para cancelar): ")
+                if id == '0':
+                    print("Operação cancelada!")
+                    break
+                else:
+                    altera.listar_especifico(id)
+                    confirma = input("Confirme com 'S' ou 'N' se é este registro que deseja alterar: ").upper()
+                    if confirma == 'S':
+                        cidade = input("Digite a cidade do cliente(Digite 0 para cancelar): ").upper()
+                        bairro = input("Digite o bairro do cliente: ").upper()
+                        rua = input("Digite a rua do cliente: ").upper()
+                        numero = input("Digite o numero do cliente: ").upper()
+                        altera.alterar_endereco(cidade, bairro, rua, numero, id)
+                        print(f"Cliente id:{id} alterado com sucesso!")
+                        altera.listar_especifico(id)
+                    else:
+                        print("Alteração abortada.")
+                        continue
+            
+            elif result1 == 4:
+                print("Você entrou na ativação/desativação de endereços!")
+                desativa = Endereco(mydb)
+                desativa.listar_endereco_completo()
+                id = (input("Digite o id do endereço que deseja desativar (Digite 0 para cancelar): "))
+                if id =='0':
+                    print("Desativação cancelada!")
+                    continue
+                else:
+                    retorno = desativa.listar_especifico_ativa_desativa(id)
+                    if retorno == 1:
+                        print("Atualmente este endereço está ativo.")
+                        resp = input("Deseja desativa-lo? (S/N) ").upper()
+                        if resp == 'S':            
+                            desativa.desativar_endereco(id)
+                        else:
+                            print("Desativação abortada")
+                            continue
+                    elif retorno == 0:
+                        print("Ataualmente este endereço está desativado.")
+                        resp = input("Deseja ativa-lo? (S/N) ").upper()
+                        if resp == 'S':
+                            desativa.ativar_endereco(id)
+                        else:
+                            print("Ativação abortada")
+                            continue
+                    else:
+                        print("Status inválido verifique na tabela")
+                    continue
+
+            elif result1 == 5:
+                print("Retornando ao menu principal")
+                break
+
+    if result == 2:
         print("Você entrou na opção cliente verifique as opções")
         result1 = 0
         while result1 != 1 or result1 != 2 or result1 != 3 or result1 != 4 or result1 != 5:
@@ -100,7 +185,7 @@ while result != 1 or result != 2 or result != 3 or result != 4:
 
     # AQUI É A PARTE DOS PRODUTOS.
 
-    elif result == 2:
+    elif result == 3:
         print("Você entrou na opção cliente verifique as opções")
         result2 = 0
         while result2 != 1 or result2 != 2 or result2 != 3 or result2 != 4 or result2 != 5:
@@ -191,7 +276,7 @@ while result != 1 or result != 2 or result != 3 or result != 4:
             elif result2 == 5:
                 print("Retornando ao menu principal")
                 break
-    elif result == 3:
+    elif result == 4:
         print("Outra funcionalidade")
     
 
