@@ -3,15 +3,14 @@ from class_conexao import mydb
 from class_cliente import Cliente
 from class_produto import Produto
 from class_endereco import Endereco
+from class_meio_de_contato import Contato
 
 
 print("Bem vindo!!")
 result = 0
 while result != 1 or result != 2 or result != 3 or result != 4:
-    print("(1)Endereço, (2)Cliente, (3)Area Produto, (4)Outra coisa, (5)Sair ")
+    print("(1)Endereço, (2)Cliente, (3)Contato, (4)Produtos, (5)Sair ")
     result = int(input("Escolha uma das opções: "))
-
-    # PARTE DOS CLIENTES
 
     if result == 1:
         print("Você entrou na opção de cadastro de endereços")
@@ -19,7 +18,7 @@ while result != 1 or result != 2 or result != 3 or result != 4:
         while result1 != 1 or result1 != 2 or result1 != 3 or result1 != 4 or result1 != 5:
             print("(1)Cadastro de novo endereço, (2)Listagem de endereços, (3)Alteração de endereço, (4)Desativação de endereço, (5)Voltar ao menu inicial")
             result1 =  int(input("Escolha uma opção do menu: "))
-            # CADASTRO DE ENDEREÇO
+            # ENDEREÇO
             if result1 == 1:
                 print("Cadastro de endereço")
                 cidade = input("Digite a cidade do cliente(Digite 0 para cancelar): ").upper()
@@ -52,7 +51,7 @@ while result != 1 or result != 2 or result != 3 or result != 4:
                     altera.listar_especifico(id)
                     confirma = input("Confirme com 'S' ou 'N' se é este registro que deseja alterar: ").upper()
                     if confirma == 'S':
-                        cidade = input("Digite a cidade do cliente(Digite 0 para cancelar): ").upper()
+                        cidade = input("Digite a cidade do cliente: ").upper()
                         bairro = input("Digite o bairro do cliente: ").upper()
                         rua = input("Digite a rua do cliente: ").upper()
                         numero = input("Digite o numero do cliente: ").upper()
@@ -96,7 +95,7 @@ while result != 1 or result != 2 or result != 3 or result != 4:
             elif result1 == 5:
                 print("Retornando ao menu principal")
                 break
-
+    # CLIENTES
     if result == 2:
         print("Você entrou na opção cliente verifique as opções")
         result1 = 0
@@ -182,10 +181,88 @@ while result != 1 or result != 2 or result != 3 or result != 4:
             if result1 == 5:
                 print("Retornando ao menu principal")
                 break
-
-    # AQUI É A PARTE DOS PRODUTOS.
+    
+    # CONTATO
 
     elif result == 3:
+        print("Você entrou nas formas de contato")
+        result3 = 0
+        while result3 != 1 or result3 != 2 or result3 != 3 or result3 != 4 or result3 != 5:
+            print("(1)Cadastro, (2)Listagem, (3)Alteração (4)Desativar (5)Voltar")
+            result3 = int(input("Escolha uma opção do menu: "))
+            if result3 == 1:
+                print("Cadastro de forma de contato")
+                desc = input("Digite a descrição do meio de contato(Digite 0 para cancelar): ").upper()
+                if desc == '0':
+                    print("Operação cancelada.")
+                    break
+                else:
+                    novo_contato = Contato(mydb)
+                    novo_contato.inserir_contato(desc)
+                continue
+
+            elif result3 == 2:
+                print("Listagem dos contatos")
+                listagem = Contato(mydb)
+                listagem.listar_contato()
+                continue
+
+            elif result3 == 3:
+                print("Você entrou na alteração de contato!")
+                altera = Contato(mydb)
+                altera.listar_contato_completo()
+                id = input("informe o id do contato que deseja alterar(Digite 0 para cancelar): ")
+                if id == '0':
+                    print("Operação cancelada!")
+                    break
+                else:
+                    altera.listar_contato_especifico(id)
+                    confirma = input("Confirme com 'S' ou 'N' se é este registro que deseja alterar: ").upper()
+                    if confirma == 'S':
+                        desc = input("Digite a descrição do contato: ").upper()
+                        altera.alterar_contato(desc, id)
+                        print(f"Contato id:{id} alterado com sucesso!")
+                        altera.listar_contato_especifico(id)
+                    else:
+                        print("Alteração abortada.")
+                        continue
+
+            elif result3 == 4:
+                print("Você entrou na ativação/desativação de endereços!")
+                desativa = Contato(mydb)
+                desativa.listar_contato_completo()
+                id = (input("Digite o id do contato que deseja ativar/desativar (Digite 0 para cancelar): "))
+                if id =='0':
+                    print("Desativação cancelada!")
+                    continue
+                else:
+                    retorno = desativa.listar_especifico_ativa_desativa(id)
+                    if retorno == 1:
+                        print("Atualmente este contato está ativo.")
+                        resp = input("Deseja desativa-lo? (S/N) ").upper()
+                        if resp == 'S':            
+                            desativa.desativar_contato(id)
+                        else:
+                            print("Desativação abortada")
+                            continue
+                    elif retorno == 0:
+                        print("Ataualmente este contato está desativado.")
+                        resp = input("Deseja ativa-lo? (S/N) ").upper()
+                        if resp == 'S':
+                            desativa.ativar_contato(id)
+                        else:
+                            print("Ativação abortada")
+                            continue
+                    else:
+                        print("Status inválido verifique na tabela")
+                    continue
+
+            elif result3 == 5:
+                print("Retornando ao menu principal")
+                break
+
+    # AQUI É A PARTE DOS PRODUTOS.
+    elif result == 4:
         print("Você entrou na opção cliente verifique as opções")
         result2 = 0
         while result2 != 1 or result2 != 2 or result2 != 3 or result2 != 4 or result2 != 5:
@@ -276,8 +353,7 @@ while result != 1 or result != 2 or result != 3 or result != 4:
             elif result2 == 5:
                 print("Retornando ao menu principal")
                 break
-    elif result == 4:
-        print("Outra funcionalidade")
+
     
 
 

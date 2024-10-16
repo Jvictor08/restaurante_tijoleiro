@@ -60,7 +60,7 @@ class Endereco:
                 for linha in result:
                     print(linha)
             except Error as e:
-                print("Erro ao listar endereço")
+                print("Erro ao listar dados")
 
     def listar_especifico_ativa_desativa(self, id):
         if self.cursor:
