@@ -4,12 +4,13 @@ from class_cliente import Cliente
 from class_produto import Produto
 from class_endereco import Endereco
 from class_meio_de_contato import Contato
+from class_finalidade import Finalidade
 
 
 print("Bem vindo!!")
 result = 0
 while result != 1 or result != 2 or result != 3 or result != 4:
-    print("(1)Endereço, (2)Cliente, (3)Contato, (4)Produtos, (5)Sair ")
+    print("(1)Endereço, (2)Cliente, (3)Contato, (4)Finalidade, (5)Produtos, (6)Sair ")
     result = int(input("Escolha uma das opções: "))
 
     if result == 1:
@@ -261,8 +262,86 @@ while result != 1 or result != 2 or result != 3 or result != 4:
                 print("Retornando ao menu principal")
                 break
 
+    # AQUI É A PARTE DAS FINALIDADES 
+    elif result == 4:  
+        print("Você entrou nas finalidades")
+        result4 = 0
+        while result4 != 1 or result4 != 2 or result4 != 3 or result4 != 4 or result4 != 5:
+            print("(1)Cadastro, (2)Listagem, (3)Alteração (4)Desativar (5)Voltar")
+            result4 = int(input("Escolha uma opção do menu: "))
+            if result4 == 1:
+                print("Cadastro de finalidade")
+                desc = input("Digite a descrição da finalidade(Digite 0 para cancelar): ").upper()
+                if desc == '0':
+                    print("Operação cancelada.")
+                    break
+                else:
+                    novo_contato = Finalidade(mydb)
+                    novo_contato.inserir_finalidade(desc)
+                continue
+
+            elif result4 == 2:
+                print("Listagem das finalidades")
+                listagem = Finalidade(mydb)
+                listagem.listar_finalidade()
+                continue
+            
+            elif result4 == 3:
+                print("Você entrou na alteração de finalidade!")
+                altera = Finalidade(mydb)
+                altera.listar_finalidade_completo()
+                id = input("informe o id da finalidade que deseja alterar(Digite 0 para cancelar): ")
+                if id == '0':
+                    print("Operação cancelada!")
+                    break
+                else:
+                    altera.listar_finalidade_especifico(id)
+                    confirma = input("Confirme com 'S' ou 'N' se é este registro que deseja alterar: ").upper()
+                    if confirma == 'S':
+                        desc = input("Digite a descrição da finalidade: ").upper()
+                        altera.alterar_finalidade(desc, id)
+                        print(f"Contato id:{id} alterado com sucesso!")
+                        altera.listar_finalidade_especifico(id)
+                    else:
+                        print("Alteração abortada.")
+                        continue
+            
+            elif result4 == 4:
+                print("Você entrou na ativação/desativação de finalidades!")
+                desativa = Finalidade(mydb)
+                desativa.listar_finalidade_completo()
+                id = (input("Digite o id da finalidade que deseja ativar/desativar (Digite 0 para cancelar): "))
+                if id =='0':
+                    print("Ativação/Desativação cancelada!")
+                    continue
+                else:
+                    retorno = desativa.listar_especifico_ativa_desativa(id)
+                    if retorno == 1:
+                        print("Atualmente esta finalidade está ativa.")
+                        resp = input("Deseja desativa-lo? (S/N) ").upper()
+                        if resp == 'S':            
+                            desativa.desativar_contato(id)
+                        else:
+                            print("Desativação abortada")
+                            continue
+                    elif retorno == 0:
+                        print("Ataualmente esta finalidade está desativada.")
+                        resp = input("Deseja ativa-lo? (S/N) ").upper()
+                        if resp == 'S':
+                            desativa.ativar_contato(id)
+                        else:
+                            print("Ativação abortada")
+                            continue
+                    else:
+                        print("Status inválido verifique na tabela")
+                    continue
+
+            elif result4 == 5:
+                print("Retornando ao menu principal")
+                break
+            
     # AQUI É A PARTE DOS PRODUTOS.
-    elif result == 4:
+    elif result == 5:
         print("Você entrou na opção cliente verifique as opções")
         result2 = 0
         while result2 != 1 or result2 != 2 or result2 != 3 or result2 != 4 or result2 != 5:
@@ -350,7 +429,7 @@ while result != 1 or result != 2 or result != 3 or result != 4:
 
         # RETORNAR AO MENU PRINCIPAL
 
-            elif result2 == 5:
+            elif result2 == 6:
                 print("Retornando ao menu principal")
                 break
 
