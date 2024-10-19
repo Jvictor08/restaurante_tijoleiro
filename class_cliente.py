@@ -16,11 +16,11 @@ class Cliente:
         else:
             print("Entrou no else da conexão!")
 
-    def inserir_cliente(self, nome, telefone):
+    def inserir_cliente(self, nome, telefone, id_enredeco):
         if self.cursor:
             try:
-                query = "INSERT INTO CLIENTE (NOME, TELEFONE) VALUES (%s, %s);"
-                self.cursor.execute(query, (nome, telefone))
+                query = "INSERT INTO tb_cliente (nome, telefone, tb_endereco_idtb_endereco) VALUES (%s, %s, %s);"
+                self.cursor.execute(query, (nome, telefone, id_enredeco))
                 self.connection.commit()
                 print(f"Cliente {nome} inserido com suecesso!")
             except Error as e:
@@ -30,20 +30,31 @@ class Cliente:
         if self.cursor:
             try:
                 cursor = self.connection.cursor()
-                query = "select id_cliente, nome, telefone from cliente where ativo = 1;"
+                query = "select a.nome, a.telefone, b.cidade, b.bairro, b.rua, b.numero  from tb_cliente a join tb_endereco b where a.tb_endereco_idtb_endereco = b.idtb_endereco and a.ativo = 1;"
                 cursor.execute(query)
                 result = cursor.fetchall()
                 for linha in result:
-                    id_cliente, nome, telefone = linha
-                    print(f"{id_cliente}, {nome}, {telefone}")
+                    print(linha)
             except Error as e:
                 print(f"Erro ao buscar os dados na tabela {e}")
 
-    def listagem_especifica(self, id):
+    def listar_cliente_completo(self):
         if self.cursor:
             try:
                 cursor = self.connection.cursor()
-                query = "select * from cliente where id_cliente = %s;"
+                query = "SELECT idtb_cliente, nome, telefone FROM tb_cliente;"
+                cursor.execute(query)
+                result = cursor.fetchall()
+                for linha in result:
+                    print(linha)
+            except Error as e:
+                print(f"Erro ao buscar os dados na tabela {e}")
+
+    def listar_especifico(self, id):
+        if self.cursor:
+            try:
+                cursor = self.connection.cursor()
+                query = "select * from tb_cliente where idtb_cliente = %s and ativo = 1;"
                 dados = (id,)
                 cursor.execute(query,dados)
                 result = cursor.fetchall()
@@ -64,12 +75,12 @@ class Cliente:
             except Error as e:
                 print(f"Erro ao rodar a listagem especifica do desativa/ativa! ERROR: {e}")
 
-    def alterar_cliente(self, nome, telefone, id):
+    def alterar_cliente(self, nome, telefone, id_endereco, id):
         if self.cursor:
             try:
                 cursor = self.connection.cursor()
-                query = "update cliente set nome = %s, telefone = %s where id_cliente = %s"
-                dados = (nome, telefone, id)
+                query = "update tb_cliente set nome = %s, telefone = %s, tb_endereco_idtb_endereco = %s where idtb_cliente = %s"
+                dados = (nome, telefone, id_endereco, id)
                 cursor.execute(query,dados)
                 self.connection.commit()
                 print("Alteração realizada com sucesso")

@@ -96,6 +96,15 @@ while result != 1 or result != 2 or result != 3 or result != 4:
             elif result1 == 5:
                 print("Retornando ao menu principal")
                 break
+
+
+
+
+
+
+
+
+
     # CLIENTES
     if result == 2:
         print("Você entrou na opção cliente verifique as opções")
@@ -108,12 +117,15 @@ while result != 1 or result != 2 or result != 3 or result != 4:
                 print("Cadastro do cliente")
                 nome = input("Digite o nome do cliente (Digite 0 para cancelar): ").upper()
                 telefone = input("Digite o telefone do cliente (Digite 0 para cancelar): ")
-                if nome == '0' or telefone == '0':
+                endereco = Endereco(mydb)
+                endereco.listar_endereco_completo()
+                id_endereco = input("Digite o id do endereço que será vinculado á este cliente: ")
+                if nome == '0' or telefone == '0' or id_endereco == '0':
                     print("Operação cancelada.")
                     break
                 else:
                     novo_cadastro = Cliente(mydb)
-                    novo_cadastro.inserir_cliente(nome,telefone)
+                    novo_cadastro.inserir_cliente(nome,telefone,id_endereco)
                 continue
 
             #LISTAGEM DE CLIENTE
@@ -128,20 +140,24 @@ while result != 1 or result != 2 or result != 3 or result != 4:
 
             if result1 == 3:
                 print("Você entrou na alteração de cliente!")
+                altera = Cliente(mydb)
+                altera.listar_cliente_completo()
                 id = input("informe o id do cliente que deseja alterar(Digite 0 para cancelar): ")
                 if id == '0':
                     print("Operação cancelada!")
                     break
                 else:
-                    altera = Cliente(mydb)
-                    altera.listagem_especifica(id)
+                    altera.listar_especifico(id)
                     confirma = input("Confirme com 'S' ou 'N' se é este registro que deseja alterar: ").upper()
                     if confirma == 'S':
                         nome = input("Digite o nome do cliente: ").upper()
-                        telefone = input("Digite o novo telefone do cliente: ")
-                        altera.alterar_cliente(nome, telefone, id)
+                        telefone = input("Digite o telefone do cliente: ").upper()
+                        endereco = Endereco(mydb)
+                        endereco.listar_endereco_completo()
+                        id_endereco = input("Digite o id do endereço que será vinculado á este cliente: ")
+                        altera.alterar_cliente(nome, telefone, id_endereco, id)
                         print(f"Cliente id:{id} alterado com sucesso!")
-                        altera.listagem_especifica(id)
+                        altera.listar_especifico(id)
                     else:
                         print("Alteração abortada.")
                         continue
@@ -182,6 +198,15 @@ while result != 1 or result != 2 or result != 3 or result != 4:
             if result1 == 5:
                 print("Retornando ao menu principal")
                 break
+
+
+
+
+
+
+
+
+
     
     # CONTATO
 
